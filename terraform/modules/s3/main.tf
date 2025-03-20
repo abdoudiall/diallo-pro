@@ -33,9 +33,11 @@ resource "aws_s3_bucket_policy" "website" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "PublicReadGetObject"
+        Sid       = "AllowCloudFrontServicePrincipal"
         Effect    = "Allow"
-        Principal = "*"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
         Action    = "s3:GetObject"
         Resource  = "${aws_s3_bucket.website.arn}/*"
         Condition = {
@@ -63,4 +65,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "website" {
       sse_algorithm = "AES256"
     }
   }
+}
+
+# Upload index.html
+resource "aws_s3_object" "index" {
+  bucket       = aws_s3_bucket.website.id
+  key          = "index.html"
+  source       = "${path.module}/content/index.html"
+  content_type = "text/html"
+  etag         = filemd5("${path.module}/content/index.html")
 } 
