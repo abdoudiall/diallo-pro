@@ -80,10 +80,7 @@ const nextConfig = {
     emotion: true
   },
   experimental: {
-    optimizeCss: true,
     scrollRestoration: true,
-    legacyBrowsers: false,
-    browsersListForSwc: true,
     gzipSize: true,
     turbotrace: {
       logLevel: 'error',
