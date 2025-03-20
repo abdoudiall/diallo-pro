@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Personnel - Abdoulaye Diallo
 
-## Getting Started
+Portfolio professionnel développé avec Next.js, TypeScript et Tailwind CSS.
 
-First, run the development server:
+## 🚀 Technologies
 
+- **Framework**: Next.js 14
+- **Langage**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Material UI
+- **Animations**: Framer Motion
+- **Icons**: Heroicons
+- **Deployment**: Vercel
+
+## 📋 Prérequis
+
+- Node.js 18.17 ou supérieur
+- npm ou yarn
+
+## 🛠 Installation
+
+1. Cloner le repository :
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/abdoudiall/diallo-pro.git
+cd diallo-pro
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Installer les dépendances :
+```bash
+npm install
+# ou
+yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Créer un fichier `.env.local` à la racine du projet :
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Lancer le serveur de développement :
+```bash
+npm run dev
+# ou
+yarn dev
+```
 
-## Learn More
+Le site sera accessible à l'adresse [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Scripts Disponibles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` : Lance le serveur de développement
+- `npm run build` : Crée une version de production
+- `npm run start` : Lance la version de production
+- `npm run lint` : Vérifie le code avec ESLint
+- `npm run format` : Formate le code avec Prettier
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔒 Sécurité
 
-## Deploy on Vercel
+Le projet inclut plusieurs mesures de sécurité :
+- Content Security Policy (CSP) stricte
+- Headers de sécurité configurés
+- Protection contre les attaques XSS et CSRF
+- Politiques de permissions restrictives
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Performance
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Optimisations mises en place :
+- Images optimisées (WebP, AVIF)
+- Compression activée
+- Optimisation des polices
+- Gestion du cache optimisée
+- Lazy loading des composants
+
+## 📱 Responsive Design
+
+Le site est entièrement responsive et s'adapte à tous les appareils :
+- Mobile (< 640px)
+- Tablet (640px - 1024px)
+- Desktop (> 1024px)
+
+## 🎨 Thème
+
+Le site utilise un thème sombre par défaut avec :
+- Couleurs personnalisées
+- Typographie optimisée
+- Animations fluides
+- Transitions élégantes
+
+## 📄 Structure du Projet
+
+```
+diallo-pro/
+├── src/
+│   ├── components/     # Composants React
+│   ├── styles/        # Styles globaux
+│   ├── utils/         # Fonctions utilitaires
+│   └── pages/         # Pages Next.js
+├── public/            # Assets statiques
+└── ...
+```
+
+## 🔍 SEO
+
+Le site est optimisé pour les moteurs de recherche avec :
+- Meta tags dynamiques
+- Sitemap généré automatiquement
+- Robots.txt configuré
+- Structure HTML sémantique
+
+## 📈 Analytics
+
+Intégration de :
+- Google Analytics
+- Vercel Analytics
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à :
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+## 👤 Contact
+
+Abdoulaye Diallo - abdoulaye@diallo.pro
+
+Lien du projet : [https://github.com/abdoudiall/diallo-pro](https://github.com/abdoudiall/diallo-pro)
