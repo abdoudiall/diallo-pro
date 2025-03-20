@@ -1,0 +1,10 @@
+aws_region = "eu-west-3"
+environment = "production"
+domain_name = "example.com"
+bucket_name = "example-bucket"
+
+# ACM certificate ARN for HTTPS (must be in us-east-1 for CloudFront)
+acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# Optional: WAF web ACL ID if you want to use AWS WAF
+waf_web_acl_id = "arn:aws:wafv2:us-east-1:123456789012:global/webacl/xxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
