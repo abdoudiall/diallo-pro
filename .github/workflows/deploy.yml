@@ -10,6 +10,7 @@ env:
   AWS_REGION: eu-west-3
   TF_VERSION: 1.11.2
   NODE_VERSION: 20
+  TF_LOG: INFO  # Add Terraform logging
 
 jobs:
   deploy:
@@ -88,7 +89,37 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./terraform/main
-        run: terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve
+          
+          # Add CloudFront deployment monitoring
+          echo "CloudFront deployment started, monitoring status..."
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[?contains(@, 'diallo.pro')]].Id" --output text)
+          
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            echo "Monitoring CloudFront distribution: $DISTRIBUTION_ID"
+            for i in {1..15}; do
+              STATUS=$(aws cloudfront get-distribution --id $DISTRIBUTION_ID --query "Distribution.Status" --output text)
+              IN_PROGRESS=$(aws cloudfront get-distribution --id $DISTRIBUTION_ID --query "Distribution.InProgress" --output text || echo "true")
+              TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
+              echo "[$TIMESTAMP] CloudFront Status: $STATUS | In Progress: $IN_PROGRESS"
+              
+              if [ "$IN_PROGRESS" = "false" ]; then
+                echo "✅ CloudFront deployment complete!"
+                break
+              fi
+              
+              if [ $i -eq 15 ]; then
+                echo "⚠️ Monitoring timeout reached. CloudFront deployment still in progress."
+                echo "The workflow will continue but CloudFront changes may still be propagating."
+              else
+                echo "Waiting 2 minutes before checking again... ($i/15)"
+                sleep 120
+              fi
+            done
+          else
+            echo "⚠️ Could not determine CloudFront distribution ID"
+          fi
 
       # Deploy to S3 and invalidate CloudFront
       - name: Deploy to S3
