@@ -9,17 +9,52 @@ on:
 env:
   AWS_REGION: eu-west-3
   TF_VERSION: 1.11.2
+  NODE_VERSION: 20
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform/main
-
+    
     steps:
       - uses: actions/checkout@v4
 
+      # Setup Node.js with caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      # Cache Next.js build
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      # Install dependencies and build Next.js
+      - name: Install dependencies
+        run: npm ci --only=production
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      # Verify build output
+      - name: List build output
+        run: |
+          echo "Content of current directory:"
+          ls -la
+          echo "\nContent of .next directory:"
+          ls -la .next || echo "No .next directory"
+          echo "\nContent of out directory:"
+          ls -la out || echo "No out directory"
+
+      # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -32,25 +67,58 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # Terraform deployment
       - name: Terraform Format
-        id: fmt
+        working-directory: ./terraform/main
         run: terraform fmt -check
 
       - name: Terraform Init
-        id: init
+        working-directory: ./terraform/main
         run: terraform init
-        env:
-          TF_INPUT: false
 
       - name: Terraform Validate
-        id: validate
+        working-directory: ./terraform/main
         run: terraform validate
 
       - name: Terraform Plan
-        id: plan
         if: github.event_name == 'pull_request'
+        working-directory: ./terraform/main
         run: terraform plan -no-color
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve 
+        working-directory: ./terraform/main
+        run: terraform apply -auto-approve
+
+      # Deploy to S3 and invalidate CloudFront
+      - name: Deploy to S3
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          if [ -d "out" ]; then
+            aws s3 sync out/ s3://diallo-pro/ \
+              --delete \
+              --cache-control "public, max-age=31536000, immutable"
+          else
+            aws s3 sync .next/static/ s3://diallo-pro/_next/static/ \
+              --delete \
+              --cache-control "public, max-age=31536000, immutable"
+            aws s3 sync public/ s3://diallo-pro/ \
+              --delete \
+              --cache-control "public, max-age=31536000, immutable"
+            aws s3 cp .next/server/pages/404.html s3://diallo-pro/404.html
+            aws s3 cp .next/server/pages/index.html s3://diallo-pro/index.html
+          fi
+
+      - name: Get CloudFront distribution ID
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: get-distribution-id
+        run: |
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[?contains(@, 'diallo.pro')]].Id" --output text)
+          echo "::set-output name=id::$DISTRIBUTION_ID"
+
+      - name: Invalidate CloudFront cache
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.get-distribution-id.outputs.id }} \
+            --paths "/*" 
