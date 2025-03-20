@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "website" {
   origin {
     domain_name              = var.s3_bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
-    origin_id               = var.s3_bucket_id
+    origin_id                = var.s3_bucket_id
   }
 
   default_cache_behavior {
@@ -25,7 +25,7 @@ resource "aws_cloudfront_distribution" "website" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.s3_bucket_id
     viewer_protocol_policy = "redirect-to-https"
-    compress              = true
+    compress               = true
 
     forwarded_values {
       query_string = false
