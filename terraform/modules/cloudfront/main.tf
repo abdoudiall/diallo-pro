@@ -10,11 +10,12 @@ resource "aws_cloudfront_origin_access_control" "website" {
 # Create CloudFront distribution
 resource "aws_cloudfront_distribution" "website" {
   enabled             = true
-  is_ipv6_enabled    = true
+  is_ipv6_enabled     = true
   default_root_object = "index.html"
   price_class         = "PriceClass_100"
   aliases             = [var.domain_name]
-  http_version       = "http2"
+  http_version        = "http2"
+  web_acl_id          = var.waf_web_acl_id
 
   # Origin configuration
   origin {
@@ -29,7 +30,7 @@ resource "aws_cloudfront_distribution" "website" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.s3_bucket_id
     viewer_protocol_policy = "redirect-to-https"
-    compress              = true
+    compress               = true
 
     forwarded_values {
       query_string = false
@@ -68,14 +69,6 @@ resource "aws_cloudfront_distribution" "website" {
     acm_certificate_arn      = var.acm_certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
-  }
-
-  # WAF configuration (optional)
-  dynamic "web_acl_id" {
-    for_each = var.waf_web_acl_id != null ? [var.waf_web_acl_id] : []
-    content {
-      id = web_acl_id.value
-    }
   }
 
   tags = {
