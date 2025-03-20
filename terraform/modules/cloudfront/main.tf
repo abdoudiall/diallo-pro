@@ -1,3 +1,4 @@
+# Create Origin Access Control for S3
 resource "aws_cloudfront_origin_access_control" "website" {
   name                              = "${var.domain_name}-oac"
   description                       = "Origin Access Control for ${var.domain_name}"
@@ -6,26 +7,29 @@ resource "aws_cloudfront_origin_access_control" "website" {
   signing_protocol                  = "sigv4"
 }
 
+# Create CloudFront distribution
 resource "aws_cloudfront_distribution" "website" {
   enabled             = true
-  is_ipv6_enabled     = true
+  is_ipv6_enabled    = true
   default_root_object = "index.html"
-  aliases             = [var.domain_name]
   price_class         = "PriceClass_100"
-  web_acl_id          = var.waf_web_acl_id
+  aliases             = [var.domain_name]
+  http_version       = "http2"
 
+  # Origin configuration
   origin {
     domain_name              = var.s3_bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
     origin_id                = var.s3_bucket_id
   }
 
+  # Cache behavior
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.s3_bucket_id
     viewer_protocol_policy = "redirect-to-https"
-    compress               = true
+    compress              = true
 
     forwarded_values {
       query_string = false
@@ -39,18 +43,7 @@ resource "aws_cloudfront_distribution" "website" {
     max_ttl     = 86400
   }
 
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  viewer_certificate {
-    acm_certificate_arn      = var.acm_certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
-  }
-
+  # Custom error responses
   custom_error_response {
     error_code         = 403
     response_code      = 200
@@ -63,8 +56,30 @@ resource "aws_cloudfront_distribution" "website" {
     response_page_path = "/index.html"
   }
 
+  # Geographic restrictions
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  # SSL/TLS configuration
+  viewer_certificate {
+    acm_certificate_arn      = var.acm_certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
+  }
+
+  # WAF configuration (optional)
+  dynamic "web_acl_id" {
+    for_each = var.waf_web_acl_id != null ? [var.waf_web_acl_id] : []
+    content {
+      id = web_acl_id.value
+    }
+  }
+
   tags = {
-    Environment = var.environment
     Name        = var.domain_name
+    Environment = var.environment
   }
 } 
