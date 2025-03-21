@@ -2,18 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Styles mode sombre uniquement */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 17, 24, 39;
   --primary-600: 37, 99, 235;
   --primary-700: 29, 78, 216;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 17, 24, 39;
-  }
 }
 
 body {
@@ -22,7 +16,7 @@ body {
 }
 
 @layer base {
-  body {
+  html {
     @apply antialiased;
   }
 }

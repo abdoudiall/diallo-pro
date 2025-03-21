@@ -4,7 +4,6 @@ import { Contact } from '@/components/contact';
 import { Hero } from '@/components/hero';
 import { Footer } from '@/components/footer';
 import { Nav } from '@/components/nav';
-import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function Home() {
   return (

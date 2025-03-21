@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { ThemeToggle } from './ThemeToggle';
 
 const navItems = [
   { name: 'Accueil', href: '#hero' },
@@ -115,24 +114,6 @@ export function Nav() {
               </span>
             </motion.a>
           ))}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ 
-              delay: navItems.length * 0.1,
-              type: "spring",
-              stiffness: 260,
-              damping: 20 
-            }}
-            className="relative group"
-          >
-            <span className="absolute right-0 w-8 h-8 flex items-center justify-center">
-              <ThemeToggle />
-            </span>
-            <span className="absolute right-full mr-6 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 shadow-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-              Changer le thème
-            </span>
-          </motion.div>
         </motion.div>
       </nav>
 
@@ -151,8 +132,7 @@ export function Nav() {
           isScrolled ? 'bg-white/90 dark:bg-gray-900/90 shadow-lg backdrop-blur-sm' : 'bg-transparent'
         }`}>
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
-              <ThemeToggle />
+            <div className="flex items-center justify-end h-16">
               <div className="flex items-center space-x-6">
                 {navItems.map((item) => (
                   <motion.a
