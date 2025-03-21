@@ -1,75 +1,83 @@
-# Portfolio Personnel - Abdoulaye Diallo
+# Personal Portfolio - Abdoulaye Diallo
 
-Portfolio professionnel développé avec Next.js, TypeScript et Tailwind CSS.
+Professional portfolio developed with Next.js, TypeScript, and Tailwind CSS.
 
 ## 🚀 Technologies
 
 - **Framework**: Next.js 14
-- **Langage**: TypeScript
+- **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: Material UI
 - **Animations**: Framer Motion
 - **Icons**: Heroicons
-- **Deployment**: Vercel
+- **Deployment**: AWS (S3, CloudFront, Route53)
 
-## 📋 Prérequis
+## 📋 Prerequisites
 
-- Node.js 18.17 ou supérieur
-- npm ou yarn
+- Node.js 18.17 or higher
+- npm or yarn
 
 ## 🛠 Installation
 
-1. Cloner le repository :
+1. Clone the repository:
 ```bash
 git clone https://github.com/abdoudiall/diallo-pro.git
 cd diallo-pro
 ```
 
-2. Installer les dépendances :
+2. Install dependencies:
 ```bash
 npm install
-# ou
+# or
 yarn install
 ```
 
-3. Créer un fichier `.env.local` à la racine du projet :
+3. Create a `.env.local` file in the project root:
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-4. Lancer le serveur de développement :
+4. Start the development server:
 ```bash
 npm run dev
-# ou
+# or
 yarn dev
 ```
 
-Le site sera accessible à l'adresse [http://localhost:3000](http://localhost:3000)
+The site will be available at [http://localhost:3000](http://localhost:3000)
 
-## 📦 Scripts Disponibles
+## 📦 Available Scripts
 
-- `npm run dev` : Lance le serveur de développement
-- `npm run build` : Crée une version de production
-- `npm run start` : Lance la version de production
-- `npm run lint` : Vérifie le code avec ESLint
-- `npm run format` : Formate le code avec Prettier
+- `npm run dev`: Starts the development server
+- `npm run build`: Creates a production build
+- `npm run start`: Starts the production server
+- `npm run lint`: Checks code with ESLint
+- `npm run format`: Formats code with Prettier
 
-## 🔒 Sécurité
+## 🔒 Security
 
-Le projet inclut plusieurs mesures de sécurité :
-- Content Security Policy (CSP) stricte
-- Headers de sécurité configurés
-- Protection contre les attaques XSS et CSRF
-- Politiques de permissions restrictives
+The project includes several security measures:
+- Content Security Policy (CSP) configured in CloudFront
+- Security headers implemented through CloudFront Response Headers Policy:
+  - Strict-Transport-Security (HSTS)
+  - X-Content-Type-Options
+  - X-Frame-Options
+  - Referrer-Policy
+  - X-XSS-Protection
+- S3 bucket with blocked public access
+- CloudFront Origin Access Control for S3 protection
 
 ## 🚀 Performance
 
-Optimisations mises en place :
-- Images optimisées (WebP, AVIF)
-- Compression activée
-- Optimisation des polices
-- Gestion du cache optimisée
-- Lazy loading des composants
+The site includes several performance optimizations:
+- Static site generation with `output: 'export'`
+- Image optimization with WebP format
+- Compression enabled
+- Font optimization
+- SWC minification
+- Console removal in production
+- Package imports optimization
+- Optimized image sizes and caching
 
 ## 🚢 Deployment
 
@@ -107,57 +115,58 @@ aws cloudfront create-invalidation --distribution-id EMS4GAR97ZQY1 --paths "/*"
 
 ## 📱 Responsive Design
 
-Le site est entièrement responsive et s'adapte à tous les appareils :
+The site is fully responsive and adapts to all devices:
 - Mobile (< 640px)
 - Tablet (640px - 1024px)
 - Desktop (> 1024px)
 
-## 🎨 Thème
+## 🎨 Theme
 
-Le site utilise un thème sombre par défaut avec :
-- Couleurs personnalisées
-- Typographie optimisée
-- Animations fluides
-- Transitions élégantes
+The site uses a dark theme by default with:
+- Custom colors
+- Optimized typography
+- Smooth animations
+- Elegant transitions
 
-## 📄 Structure du Projet
+## 📄 Project Structure
 
 ```
 diallo-pro/
 ├── src/
-│   ├── components/     # Composants React
-│   ├── styles/        # Styles globaux
-│   ├── utils/         # Fonctions utilitaires
-│   └── pages/         # Pages Next.js
-├── public/            # Assets statiques
+│   ├── app/            # Next.js App Router structure
+│   │   ├── layout.tsx  # Root layout with metadata
+│   │   ├── page.tsx    # Homepage
+│   │   ├── globals.css # Global styles
+│   │   └── providers.tsx # Theme and other providers
+│   └── components/     # React components
+├── terraform/          # Infrastructure as Code
+│   ├── main/           # Main Terraform configuration
+│   └── modules/        # Reusable Terraform modules
 └── ...
 ```
 
 ## 🔍 SEO
 
-Le site est optimisé pour les moteurs de recherche avec :
-- Meta tags dynamiques
-- Sitemap généré automatiquement
-- Robots.txt configuré
-- Structure HTML sémantique
+The site includes basic SEO configuration:
+- Simple metadata in layout.tsx with title and description
+- HTML lang attribute set to "fr"
+- Inter font from Google Fonts for typography
 
 ## 📈 Analytics
 
-Intégration de :
-- Google Analytics
-- Vercel Analytics
+No analytics integrations are currently implemented in the codebase.
 
 ## 🤝 Contribution
 
-Les contributions sont les bienvenues ! N'hésitez pas à :
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
+Contributions are welcome! Feel free to:
+1. Fork the project
+2. Create a branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 👤 Contact
 
 Abdoulaye Diallo - abdoulaye@diallo.pro
 
-Lien du projet : [https://github.com/abdoudiall/diallo-pro](https://github.com/abdoudiall/diallo-pro)
+Project link: [https://github.com/abdoudiall/diallo-pro](https://github.com/abdoudiall/diallo-pro)
