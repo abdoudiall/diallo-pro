@@ -1,9 +1,5 @@
 # Makefile for deploying diallo.pro
 
-# Variables
-BUCKET_NAME = diallo-pro
-DISTRIBUTION_ID = EMS4GAR97ZQY1
-
 # Terraform main configuration path
 TF_MAIN_PATH = terraform/main
 
@@ -14,7 +10,11 @@ YELLOW = \033[0;33m
 RED = \033[0;31m
 RESET = \033[0m
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all
+# Dynamic variables from Terraform outputs
+BUCKET_NAME = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw website_bucket_name 2>/dev/null | tr -d '\n\r')
+DISTRIBUTION_ID = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw cloudfront_distribution_id 2>/dev/null | tr -d '\n\r')
+
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars
 
 help:
 	@echo "$(BLUE)Available commands:$(RESET)"
@@ -28,14 +28,42 @@ help:
 	@echo "  $(GREEN)make clean$(RESET)           - Remove generated files"
 	@echo "  $(GREEN)make all$(RESET)             - Run all steps (format, validate, plan, apply, build, deploy)"
 	@echo "  $(GREEN)make all-clean$(RESET)       - Run all steps and clean up afterwards"
+	@echo "  $(GREEN)make show-vars$(RESET)       - Display values of dynamic variables from Terraform"
+	@echo "  $(GREEN)make check-vars$(RESET)      - Verify that Terraform variables are properly defined"
+	@echo "  $(GREEN)make terraform-refresh$(RESET) - Refresh Terraform state"
+
+# Display values of dynamic variables
+show-vars: terraform-refresh
+	@echo "$(BLUE)Dynamic variables from Terraform:$(RESET)"
+	@if [ -z "$(BUCKET_NAME)" ]; then \
+		echo "$(RED)ERREUR: BUCKET_NAME est vide. Vérifiez l'état Terraform.$(RESET)"; \
+		exit 1; \
+	fi
+	@if [ -z "$(DISTRIBUTION_ID)" ]; then \
+		echo "$(RED)ERREUR: DISTRIBUTION_ID est vide. Vérifiez l'état Terraform.$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)BUCKET_NAME$(RESET)     = $(GREEN)$(BUCKET_NAME)$(RESET)"
+	@echo "$(YELLOW)DISTRIBUTION_ID$(RESET) = $(GREEN)$(DISTRIBUTION_ID)$(RESET)"
 
 # Build the application
 build:
 	@echo "$(BLUE)Building Next.js application...$(RESET)"
 	npm run build
 
+# Vérification des variables avant déploiement
+check-vars:
+	@if [ -z "$(BUCKET_NAME)" ]; then \
+		echo "$(RED)ERREUR: BUCKET_NAME est vide. Impossible de déployer.$(RESET)"; \
+		exit 1; \
+	fi
+	@if [ -z "$(DISTRIBUTION_ID)" ]; then \
+		echo "$(RED)ERREUR: DISTRIBUTION_ID est vide. Impossible de déployer.$(RESET)"; \
+		exit 1; \
+	fi
+
 # Deploy to S3 and invalidate CloudFront
-deploy: build
+deploy: build check-vars
 	@echo "$(BLUE)Deploying to S3...$(RESET)"
 	cd out && aws s3 sync . s3://$(BUCKET_NAME) --delete
 	@echo "$(BLUE)Invalidating CloudFront cache...$(RESET)"
@@ -83,4 +111,9 @@ all: terraform-format terraform-validate terraform-plan terraform-apply build de
 all-clean: all
 	@echo "$(BLUE)Cleaning up after full deployment process...$(RESET)"
 	$(MAKE) clean
-	@echo "$(GREEN)Cleanup completed!$(RESET)" 
+	@echo "$(GREEN)Cleanup completed!$(RESET)"
+
+# Refresh Terraform state
+terraform-refresh:
+	@echo "$(BLUE)Refreshing Terraform state...$(RESET)"
+	cd $(TF_MAIN_PATH) && terraform refresh 
