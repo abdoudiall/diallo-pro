@@ -1,13 +1,13 @@
 resource "aws_cloudfront_response_headers_policy" "security_headers" {
-  name    = "${var.domain_name}-security-headers"
+  name    = "${replace(var.domain_name, ".", "-")}-security-headers"
   comment = "Security headers policy for ${var.domain_name}"
 
   security_headers_config {
     content_security_policy {
       content_security_policy = join("; ", [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "script-src 'self'",
+        "style-src 'self' https://fonts.googleapis.com",
         "img-src 'self' data: https: *.linkedin.com *.malt.fr *.github.com",
         "font-src 'self' https://fonts.gstatic.com",
         "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com"

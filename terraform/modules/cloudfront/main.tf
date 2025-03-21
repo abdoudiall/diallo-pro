@@ -33,12 +33,8 @@ resource "aws_cloudfront_distribution" "website" {
     compress                   = true
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
 
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
+    cache_policy_id          = aws_cloudfront_cache_policy.caching_optimized.id
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.s3_origin.id
 
     min_ttl     = 0
     default_ttl = 3600

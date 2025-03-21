@@ -10,7 +10,8 @@ env:
   AWS_REGION: eu-west-3
   TF_VERSION: 1.11.2
   NODE_VERSION: 20
-  TF_LOG: INFO  # Add Terraform logging
+  BUCKET_NAME: diallo-pro
+  DISTRIBUTION_ID: EMS4GAR97ZQY1  # ID fixe de la distribution CloudFront
 
 jobs:
   deploy:
@@ -45,16 +46,6 @@ jobs:
         env:
           NODE_ENV: production
 
-      # Verify build output
-      - name: List build output
-        run: |
-          echo "Content of current directory:"
-          ls -la
-          echo "\nContent of .next directory:"
-          ls -la .next || echo "No .next directory"
-          echo "\nContent of out directory:"
-          ls -la out || echo "No out directory"
-
       # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -68,10 +59,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # Terraform deployment
+      # Terraform format and initialize
       - name: Terraform Format
-        working-directory: ./terraform/main
-        run: terraform fmt -check
+        working-directory: ./terraform
+        run: terraform fmt -recursive
 
       - name: Terraform Init
         working-directory: ./terraform/main
@@ -82,74 +73,35 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        if: github.event_name == 'pull_request'
         working-directory: ./terraform/main
         run: terraform plan -no-color
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./terraform/main
-        run: |
-          terraform apply -auto-approve
-          
-          # Add CloudFront deployment monitoring
-          echo "CloudFront deployment started, monitoring status..."
-          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[?contains(@, 'diallo.pro')]].Id" --output text)
-          
-          if [ -n "$DISTRIBUTION_ID" ]; then
-            echo "Monitoring CloudFront distribution: $DISTRIBUTION_ID"
-            for i in {1..15}; do
-              STATUS=$(aws cloudfront get-distribution --id $DISTRIBUTION_ID --query "Distribution.Status" --output text)
-              IN_PROGRESS=$(aws cloudfront get-distribution --id $DISTRIBUTION_ID --query "Distribution.InProgress" --output text || echo "true")
-              TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
-              echo "[$TIMESTAMP] CloudFront Status: $STATUS | In Progress: $IN_PROGRESS"
-              
-              if [ "$IN_PROGRESS" = "false" ]; then
-                echo "✅ CloudFront deployment complete!"
-                break
-              fi
-              
-              if [ $i -eq 15 ]; then
-                echo "⚠️ Monitoring timeout reached. CloudFront deployment still in progress."
-                echo "The workflow will continue but CloudFront changes may still be propagating."
-              else
-                echo "Waiting 2 minutes before checking again... ($i/15)"
-                sleep 120
-              fi
-            done
-          else
-            echo "⚠️ Could not determine CloudFront distribution ID"
-          fi
+        run: terraform apply -auto-approve
 
-      # Deploy to S3 and invalidate CloudFront
+      # Deploy to S3
       - name: Deploy to S3
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           if [ -d "out" ]; then
-            aws s3 sync out/ s3://diallo-pro/ \
+            echo "Deploying static export from 'out' directory"
+            aws s3 sync out/ s3://${{ env.BUCKET_NAME }}/ \
               --delete \
               --cache-control "public, max-age=31536000, immutable"
           else
-            aws s3 sync .next/static/ s3://diallo-pro/_next/static/ \
-              --delete \
-              --cache-control "public, max-age=31536000, immutable"
-            aws s3 sync public/ s3://diallo-pro/ \
-              --delete \
-              --cache-control "public, max-age=31536000, immutable"
-            aws s3 cp .next/server/pages/404.html s3://diallo-pro/404.html
-            aws s3 cp .next/server/pages/index.html s3://diallo-pro/index.html
+            echo "ERROR: 'out' directory not found. Build may have failed."
+            exit 1
           fi
+          echo "Deployment to S3 completed successfully"
 
-      - name: Get CloudFront distribution ID
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        id: get-distribution-id
-        run: |
-          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[?contains(@, 'diallo.pro')]].Id" --output text)
-          echo "::set-output name=id::$DISTRIBUTION_ID"
-
+      # Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
+          echo "Invalidating CloudFront cache for distribution ${{ env.DISTRIBUTION_ID }}"
           aws cloudfront create-invalidation \
-            --distribution-id ${{ steps.get-distribution-id.outputs.id }} \
-            --paths "/*" 
+            --distribution-id ${{ env.DISTRIBUTION_ID }} \
+            --paths "/*"
+          echo "CloudFront invalidation initiated" 
