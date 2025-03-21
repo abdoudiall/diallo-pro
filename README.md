@@ -71,6 +71,40 @@ Optimisations mises en place :
 - Gestion du cache optimisée
 - Lazy loading des composants
 
+## 🚢 Deployment
+
+### Prerequisites
+
+- AWS CLI installed and configured with appropriate permissions
+- Terraform installed (version 1.0.0 or higher)
+
+### Infrastructure Deployment
+
+```bash
+# Format and validate Terraform code
+cd terraform/main
+terraform fmt -recursive ..
+terraform validate
+
+# Plan and apply changes
+terraform plan
+terraform apply
+```
+
+### Website Deployment
+
+```bash
+# Build the application
+npm run build
+
+# Sync with S3 bucket
+cd out
+aws s3 sync . s3://diallo-pro --delete
+
+# Invalidate CloudFront cache
+aws cloudfront create-invalidation --distribution-id EMS4GAR97ZQY1 --paths "/*"
+```
+
 ## 📱 Responsive Design
 
 Le site est entièrement responsive et s'adapte à tous les appareils :
