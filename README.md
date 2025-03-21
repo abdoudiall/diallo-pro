@@ -81,35 +81,53 @@ The site includes several performance optimizations:
 
 ## 🚢 Deployment
 
+The site can be deployed using the provided Makefile commands.
+
 ### Prerequisites
 
 - AWS CLI installed and configured with appropriate permissions
 - Terraform installed (version 1.0.0 or higher)
+- GNU Make
 
-### Infrastructure Deployment
+### Deployment Commands
 
 ```bash
-# Format and validate Terraform code
+# Show available commands
+make help
+
+# Infrastructure deployment
+make terraform-format    # Format Terraform code
+make terraform-validate  # Validate Terraform configuration
+make terraform-plan      # Show planned infrastructure changes
+make terraform-apply     # Apply infrastructure changes
+
+# Website deployment
+make build               # Build the Next.js application
+make deploy              # Deploy to S3 and invalidate CloudFront cache
+make deploy-clean        # Deploy and clean up afterwards
+
+# Full deployment process
+make all                 # Run all steps (format, validate, plan, apply, build, deploy)
+make all-clean           # Run all steps and clean up afterwards
+
+# Clean generated files
+make clean               # Remove generated files (.next, out, etc.)
+```
+
+You can also use the individual steps manually:
+
+```bash
+# Infrastructure Deployment
 cd terraform/main
 terraform fmt -recursive ..
 terraform validate
-
-# Plan and apply changes
 terraform plan
-terraform apply
-```
+terraform apply -auto-approve
 
-### Website Deployment
-
-```bash
-# Build the application
+# Website Deployment
 npm run build
-
-# Sync with S3 bucket
 cd out
 aws s3 sync . s3://diallo-pro --delete
-
-# Invalidate CloudFront cache
 aws cloudfront create-invalidation --distribution-id EMS4GAR97ZQY1 --paths "/*"
 ```
 
