@@ -6,10 +6,10 @@ const nextConfig = {
   swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
-    emotion: true
+    emotion: true,
   },
   experimental: {
-    optimizePackageImports: ['@mui/icons-material', '@mui/material', 'date-fns']
+    optimizePackageImports: ['@mui/icons-material', '@mui/material', 'date-fns'],
   },
   images: {
     domains: ['linkedin.com', 'malt.fr', 'github.com'],
@@ -28,4 +28,4 @@ const nextConfig = {
   trailingSlash: true,
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

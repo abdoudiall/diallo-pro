@@ -7,9 +7,9 @@ Professional portfolio developed with Next.js, TypeScript, and Tailwind CSS.
 - **Framework**: Next.js 14
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **UI Components**: Material UI
 - **Animations**: Framer Motion
-- **Icons**: Heroicons
+- **Icons**: Heroicons, Simple Icons
+- **UI Components**: Radix UI (Tooltip)
 - **Deployment**: AWS (S3, CloudFront, Route53)
 
 ## 📋 Prerequisites
@@ -32,12 +32,7 @@ npm install
 yarn install
 ```
 
-3. Create a `.env.local` file in the project root:
-```env
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-4. Start the development server:
+3. Start the development server:
 ```bash
 npm run dev
 # or
@@ -71,13 +66,12 @@ The project includes several security measures:
 
 The site includes several performance optimizations:
 - Static site generation with `output: 'export'`
-- Image optimization with WebP format
+- SVG optimization for logos and icons
 - Compression enabled
-- Font optimization
+- Font optimization with Inter font
 - SWC minification
 - Console removal in production
 - Package imports optimization
-- Optimized image sizes and caching
 
 ## 🚢 Deployment
 
@@ -98,37 +92,20 @@ make help
 # Infrastructure deployment
 make terraform-format    # Format Terraform code
 make terraform-validate  # Validate Terraform configuration
-make terraform-plan      # Show planned infrastructure changes
-make terraform-apply     # Apply infrastructure changes
+make terraform-plan     # Show planned infrastructure changes
+make terraform-apply    # Apply infrastructure changes
 
 # Website deployment
-make build               # Build the Next.js application
-make deploy              # Deploy to S3 and invalidate CloudFront cache
-make deploy-clean        # Deploy and clean up afterwards
+make build              # Build the Next.js application
+make deploy            # Deploy to S3 and invalidate CloudFront cache
+make deploy-clean      # Deploy and clean up afterwards
 
 # Full deployment process
-make all                 # Run all steps (format, validate, plan, apply, build, deploy)
-make all-clean           # Run all steps and clean up afterwards
+make all               # Run all steps (format, validate, plan, apply, build, deploy)
+make all-clean         # Run all steps and clean up afterwards
 
 # Clean generated files
-make clean               # Remove generated files (.next, out, etc.)
-```
-
-You can also use the individual steps manually:
-
-```bash
-# Infrastructure Deployment
-cd terraform/main
-terraform fmt -recursive ..
-terraform validate
-terraform plan
-terraform apply -auto-approve
-
-# Website Deployment
-npm run build
-cd out
-aws s3 sync . s3://diallo-pro --delete
-aws cloudfront create-invalidation --distribution-id EMS4GAR97ZQY1 --paths "/*"
+make clean             # Remove generated files (.next, out, etc.)
 ```
 
 ## 📱 Responsive Design
@@ -140,39 +117,55 @@ The site is fully responsive and adapts to all devices:
 
 ## 🎨 Theme
 
-The site uses a dark theme by default with:
-- Custom colors
-- Optimized typography
-- Smooth animations
-- Elegant transitions
+The site uses a dark theme exclusively with:
+- Dark background (`bg-gray-900`)
+- Accent colors:
+  - Blue (`text-blue-500`, `text-blue-600`) for tech-related items
+  - Green (`text-green-500`) for leadership items
+  - Purple (`text-purple-500`, `text-purple-600`) for certain tech items
+  - Orange (`text-orange-500`) for AWS and Malt
+  - Gray (`text-gray-400`, `text-gray-800`) for descriptive text
+- Typography:
+  - Inter font for all text
+  - Bold headings (`font-bold`)
+  - Various text sizes from `text-sm` to `text-5xl`
+- Animations:
+  - Fade and slide up animations with Framer Motion
+  - Hover effects on interactive elements
+  - Smooth transitions for colors and borders
+- Components:
+  - Rounded corners (`rounded-lg`)
+  - Subtle borders (`border-gray-700`)
+  - Semi-transparent backgrounds (`bg-gray-800/50`)
+  - Tooltips with dark background and white text
 
 ## 📄 Project Structure
 
 ```
 diallo-pro/
 ├── src/
-│   ├── app/            # Next.js App Router structure
-│   │   ├── layout.tsx  # Root layout with metadata
-│   │   ├── page.tsx    # Homepage
-│   │   ├── globals.css # Global styles
-│   │   └── providers.tsx # Theme and other providers
-│   └── components/     # React components
-├── terraform/          # Infrastructure as Code
-│   ├── main/           # Main Terraform configuration
-│   └── modules/        # Reusable Terraform modules
+│   ├── app/                # Next.js App Router structure
+│   │   ├── layout.tsx      # Root layout with metadata
+│   │   ├── page.tsx        # Homepage
+│   │   └── globals.css     # Global styles
+│   └── components/
+│       └── main-content.tsx # Main component with all sections
+├── public/
+│   ├── favicon.svg         # Site favicon
+│   └── images/
+│       └── logos/         # Company logos
 └── ...
 ```
 
 ## 🔍 SEO
 
 The site includes basic SEO configuration:
-- Simple metadata in layout.tsx with title and description
+- Metadata in layout.tsx:
+  - Title: "Abdoulaye Diallo"
+  - Description: "Consultant en systèmes d'information et transformation digitale"
 - HTML lang attribute set to "fr"
-- Inter font from Google Fonts for typography
-
-## 📈 Analytics
-
-No analytics integrations are currently implemented in the codebase.
+- Inter font from Google Fonts
+- SVG favicon with initials "AD"
 
 ## 🤝 Contribution
 

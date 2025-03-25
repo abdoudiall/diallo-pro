@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 export function Footer() {
   return (
     <footer className="py-4 bg-gray-100 dark:bg-gray-900">
@@ -11,10 +9,18 @@ export function Footer() {
           <span>Halinia Consulting</span>
           <span>•</span>
           <span className="text-xs">
-            Développé avec <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Cursor AI</a>
+            Développé avec{' '}
+            <a
+              href="https://cursor.sh"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-500 transition-colors"
+            >
+              Cursor AI
+            </a>
           </span>
         </div>
       </div>
     </footer>
   );
-} 
+}

@@ -2,16 +2,35 @@
 
 import { motion } from 'framer-motion';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { 
-  SiDotnet, SiNodedotjs, SiAmazon, SiDocker, SiKubernetes, 
-  SiGithubactions, SiTerraform, SiDatadog, SiGrafana, 
-  SiMongodb, SiPostgresql, SiSnowflake, SiPrometheus,
-  SiLinkedin, SiMalt, SiGithub
+import {
+  SiDotnet,
+  SiNodedotjs,
+  SiAmazon,
+  SiDocker,
+  SiKubernetes,
+  SiGithubactions,
+  SiTerraform,
+  SiDatadog,
+  SiGrafana,
+  SiMongodb,
+  SiPostgresql,
+  SiSnowflake,
+  SiPrometheus,
+  SiLinkedin,
+  SiMalt,
+  SiGithub,
 } from 'react-icons/si';
-import { 
-  CreditCardIcon, ServerIcon, UserGroupIcon, ArrowPathIcon, EnvelopeIcon,
-  CloudArrowUpIcon, CodeBracketIcon, ChartBarSquareIcon
+import {
+  CreditCardIcon,
+  ServerIcon,
+  UserGroupIcon,
+  ArrowPathIcon,
+  EnvelopeIcon,
+  CloudArrowUpIcon,
+  CodeBracketIcon,
+  ChartBarSquareIcon,
 } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 // References
 const companies = [
@@ -41,19 +60,22 @@ const companies = [
 const services = [
   {
     title: 'Systèmes de paiement en ligne',
-    description: 'De la conception à l\'optimisation, une expertise technique approfondie pour des solutions de paiement en ligne fiables et évolutives.',
+    description:
+      "De la conception à l'optimisation, une expertise technique approfondie pour des solutions de paiement en ligne fiables et évolutives.",
     icon: CreditCardIcon,
     color: 'text-blue-500',
   },
   {
     title: 'Leadership & transformation',
-    description: 'Accompagnement des équipes dans leur transformation technique et organisationnelle, avec une approche pragmatique orientée résultats et amélioration continue.',
+    description:
+      'Accompagnement des équipes dans leur transformation technique et organisationnelle, avec une approche pragmatique orientée résultats et amélioration continue.',
     icon: UserGroupIcon,
     color: 'text-green-500',
   },
   {
     title: 'Architecture & développement',
-    description: 'Vision globale des systèmes d\'information, du développement au déploiement, en passant par la conception d\'architectures évolutives et maintenables.',
+    description:
+      "Vision globale des systèmes d'information, du développement au déploiement, en passant par la conception d'architectures évolutives et maintenables.",
     icon: ServerIcon,
     color: 'text-purple-500',
   },
@@ -66,49 +88,54 @@ const domains = [
     items: [
       { name: '.NET', icon: SiDotnet, color: 'text-purple-600' },
       { name: 'Node.js', icon: SiNodedotjs, color: 'text-green-600' },
-      { name: 'API', icon: CodeBracketIcon, isHeroIcon: true, color: 'text-blue-600' }
-    ]
+      { name: 'API', icon: CodeBracketIcon, isHeroIcon: true, color: 'text-blue-600' },
+    ],
   },
   {
     category: 'Architecture cloud',
     items: [
       { name: 'AWS', icon: SiAmazon, color: 'text-orange-500' },
       { name: 'Serverless', icon: CloudArrowUpIcon, isHeroIcon: true, color: 'text-blue-500' },
-      { name: 'Terraform', icon: SiTerraform, color: 'text-purple-500' }
-    ]
+      { name: 'Terraform', icon: SiTerraform, color: 'text-purple-500' },
+    ],
   },
   {
     category: 'Bases de données',
     items: [
       { name: 'PostgreSQL', icon: SiPostgresql, color: 'text-blue-600' },
       { name: 'MongoDB', icon: SiMongodb, color: 'text-green-500' },
-      { name: 'Snowflake', icon: SiSnowflake, color: 'text-blue-500' }
-    ]
+      { name: 'Snowflake', icon: SiSnowflake, color: 'text-blue-500' },
+    ],
   },
   {
     category: 'Plateforme & outils',
     items: [
       { name: 'Docker', icon: SiDocker, color: 'text-blue-400' },
       { name: 'Kubernetes', icon: SiKubernetes, color: 'text-blue-500' },
-      { name: 'GitHub Actions', icon: SiGithubactions, color: 'text-gray-600' }
-    ]
+      { name: 'GitHub Actions', icon: SiGithubactions, color: 'text-gray-600' },
+    ],
   },
   {
     category: 'Transformation',
     items: [
       { name: 'Leadership', icon: UserGroupIcon, isHeroIcon: true, color: 'text-green-500' },
       { name: 'Agilité', icon: ArrowPathIcon, isHeroIcon: true, color: 'text-blue-500' },
-      { name: 'Organisation', icon: ChartBarSquareIcon, isHeroIcon: true, color: 'text-purple-500' }
-    ]
+      {
+        name: 'Organisation',
+        icon: ChartBarSquareIcon,
+        isHeroIcon: true,
+        color: 'text-purple-500',
+      },
+    ],
   },
   {
     category: 'Observabilité',
     items: [
       { name: 'Datadog', icon: SiDatadog, color: 'text-purple-400' },
       { name: 'Grafana', icon: SiGrafana, color: 'text-orange-500' },
-      { name: 'Prometheus', icon: SiPrometheus, color: 'text-red-500' }
-    ]
-  }
+      { name: 'Prometheus', icon: SiPrometheus, color: 'text-red-500' },
+    ],
+  },
 ];
 
 // Contacts
@@ -130,7 +157,7 @@ const contacts = [
     href: 'mailto:abdoulaye@diallo.pro',
     icon: EnvelopeIcon,
     isHeroIcon: true,
-    color: 'text-blue-500'
+    color: 'text-blue-500',
   },
   {
     name: 'GitHub',
@@ -157,7 +184,7 @@ export function MainContent() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-end h-16">
             <div className="flex items-center space-x-8">
-              {navItems.map((item) => (
+              {navItems.map(item => (
                 <a
                   key={item.name}
                   href={item.href}
@@ -182,14 +209,13 @@ export function MainContent() {
               transition={{ duration: 0.5 }}
               className="text-center"
             >
-              <h1 className="text-4xl font-bold mb-6 sm:text-5xl">
-                Abdoulaye Diallo
-              </h1>
+              <h1 className="text-4xl font-bold mb-6 sm:text-5xl">Abdoulaye Diallo</h1>
               <h2 className="text-2xl mb-8 text-gray-200">
                 Consultant en systèmes d'information et transformation digitale
               </h2>
               <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                Expert technique, fonctionnel et organisationnel, j'accompagne vos projets de toute envergure en alliant vision stratégique et expertise opérationnelle.
+                Expert technique, fonctionnel et organisationnel, j'accompagne vos projets de toute
+                envergure en alliant vision stratégique et expertise opérationnelle.
               </p>
             </motion.div>
           </div>
@@ -225,9 +251,7 @@ export function MainContent() {
                     <service.icon className={`h-12 w-12 ${service.color}`} />
                     <div>
                       <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                      <p className="text-gray-400 text-sm">
-                        {service.description}
-                      </p>
+                      <p className="text-gray-400 text-sm">{service.description}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -247,9 +271,7 @@ export function MainContent() {
               className="text-center mb-12"
             >
               <h2 className="text-3xl font-bold mb-4">Compétences</h2>
-              <p className="text-gray-400">
-                Technologies, outils et méthodes
-              </p>
+              <p className="text-gray-400">Technologies, outils et méthodes</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -269,14 +291,18 @@ export function MainContent() {
                         key={tech.name}
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: (categoryIndex * 0.1) + (index * 0.05) }}
+                        transition={{ duration: 0.3, delay: categoryIndex * 0.1 + index * 0.05 }}
                         viewport={{ once: true }}
                         className="flex items-center space-x-3 group"
                       >
                         {tech.isHeroIcon ? (
-                          <tech.icon className={`h-6 w-6 ${tech.color} transition-transform group-hover:scale-110`} />
+                          <tech.icon
+                            className={`h-6 w-6 ${tech.color} transition-transform group-hover:scale-110`}
+                          />
                         ) : (
-                          <tech.icon className={`h-6 w-6 ${tech.color} transition-transform group-hover:scale-110`} />
+                          <tech.icon
+                            className={`h-6 w-6 ${tech.color} transition-transform group-hover:scale-110`}
+                          />
                         )}
                         <span className="text-gray-300">{tech.name}</span>
                       </motion.div>
@@ -313,10 +339,12 @@ export function MainContent() {
                       className="relative group w-full cursor-pointer"
                     >
                       <div className="w-full h-16 flex items-center justify-center transition-all duration-300">
-                        <img
+                        <Image
                           src={company.logo}
                           alt={`Logo ${company.name}`}
-                          className="w-full h-full object-contain opacity-90 hover:opacity-100 transition-all duration-300"
+                          width={100}
+                          height={40}
+                          className="h-10 w-auto object-contain"
                         />
                       </div>
                     </motion.div>
@@ -387,4 +415,4 @@ export function MainContent() {
       </Tooltip.Provider>
     </>
   );
-} 
+}
