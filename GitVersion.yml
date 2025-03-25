@@ -5,7 +5,7 @@ assembly-file-versioning-scheme: MajorMinorPatch
 mode: ContinuousDelivery
 major-version-bump-message: '^(breaking|major):'
 minor-version-bump-message: '^(feature|feat):'
-patch-version-bump-message: '^(ci|build|fix|patch|chore|docs|style|refactor):'
+patch-version-bump-message: '^(fix|patch|chore|docs|style|refactor|ci|build):'
 no-bump-message: '^(perf|test):'
 tag-prefix: 'v'
 commit-message-incrementing: Enabled
