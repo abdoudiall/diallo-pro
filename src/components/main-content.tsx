@@ -31,7 +31,6 @@ import {
   ChartBarSquareIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import { version } from '@/config/version';
 
 // References
 const companies = [
@@ -419,7 +418,7 @@ export function MainContent() {
               viewport={{ once: true }}
               className="text-center mt-6 text-sm text-gray-500"
             >
-              © 2024 Halinia Consulting • Développé avec Cursor AI • v{version}
+              © 2024 Halinia Consulting • Développé avec Cursor AI
             </motion.div>
           </div>
         </section>
