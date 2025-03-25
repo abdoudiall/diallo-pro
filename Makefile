@@ -17,7 +17,7 @@ RESET = \033[0m
 BUCKET_NAME = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw website_bucket_name 2>/dev/null | tr -d '\n\r')
 DISTRIBUTION_ID = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw cloudfront_distribution_id 2>/dev/null | tr -d '\n\r')
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version version-patch version-minor version-major
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install
 
 help:
 	@echo "$(BLUE)Available commands:$(RESET)"
@@ -141,20 +141,4 @@ terraform-refresh:
 	@echo "$(BLUE)Refreshing Terraform state...$(RESET)"
 	cd $(TF_MAIN_PATH) && terraform refresh
 
-## DEV version: ## Display current version
-version:
-	@npm run version:show
-
-## DEV version-patch: ## Increment patch version (0.0.X)
-version-patch:
-	@npm run version:patch
-
-## DEV version-minor: ## Increment minor version (0.X.0)
-version-minor:
-	@npm run version:minor
-
-## DEV version-major: ## Increment major version (X.0.0)
-version-major:
-	@npm run version:major
-
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version version-patch version-minor version-major 
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install 

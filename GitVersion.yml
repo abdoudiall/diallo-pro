@@ -1,0 +1,22 @@
+mode: ContinuousDelivery
+major-version-bump-message: '^(breaking|major):'
+minor-version-bump-message: '^(feature|feat):'
+patch-version-bump-message: '^(fix|patch):'
+no-bump-message: '^(chore|docs|style|refactor|perf|test):'
+tag-prefix: 'v'
+commit-message-incrementing: Enabled
+branches:
+  main:
+    regex: ^main$
+    mode: ContinuousDelivery
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    source-branches: []
+    tracks-release-branches: false
+    is-release-branch: false
+    is-mainline: true
+    pre-release-weight: 55000
+ignore:
+  sha: [] 

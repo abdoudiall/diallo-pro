@@ -1,17 +1,13 @@
 {
   "name": "diallo-pro",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint && prettier --check \"src/**/*.{ts,tsx,css,json}\" \"*.{js,json}\"",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\" \"*.{js,json}\"",
-    "version:patch": "npm version patch && git push && git push --tags",
-    "version:minor": "npm version minor && git push && git push --tags",
-    "version:major": "npm version major && git push && git push --tags",
-    "version:show": "echo \"Current version: $(git describe --tags --always --dirty)\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\" \"*.{js,json}\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
