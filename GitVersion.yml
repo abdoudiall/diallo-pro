@@ -9,13 +9,19 @@ patch-version-bump-message: '^(fix|patch|chore|docs|style|refactor|ci|build):'
 no-bump-message: '^(perf|test):'
 tag-prefix: 'v'
 commit-message-incrementing: Enabled
+next-version: 1.0.0
 branches:
   main:
     regex: ^main$
     increment: Patch
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment-of-merged-branch-version: true
     is-release-branch: true
     is-mainline: true
+    track-merge-target: true
+    source-branches: []
+    tracks-release-branches: false
+    is-release-branch: true
+    pre-release-weight: 55000
   feature:
     regex: ^feature?[/-]
     increment: Inherit

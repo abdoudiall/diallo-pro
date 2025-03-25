@@ -181,3 +181,41 @@ Contributions are welcome! Feel free to:
 Abdoulaye Diallo - abdoulaye@diallo.pro
 
 Project link: [https://github.com/abdoudiall/diallo-pro](https://github.com/abdoudiall/diallo-pro)
+
+## Versioning System
+
+The project uses GitVersion for automatic version management. Versions follow the [Major].[Minor].[Patch] format.
+
+### Increment Rules
+
+Versions are automatically incremented based on commit messages:
+
+- `breaking:` or `major:` → Increments major version (x.0.0)
+  - Example: "breaking: major API changes"
+  - Note: After a major version, you need to create a manual tag (ex: `git tag -a v2.0.0 -m "Version 2.0.0"`)
+
+- `feature:` or `feat:` → Increments minor version (1.x.0)
+  - Example: "feature: add new functionality"
+
+- `fix:`, `patch:`, `chore:`, `docs:`, `style:`, `refactor:`, `ci:`, `build:` → Increments patch version (1.0.x)
+  - Example: "fix: bug correction"
+
+### Useful Commands
+
+```bash
+# Show current version
+make version
+
+# Create manual tag (required after major version)
+git tag -a vX.Y.Z -m "Version X.Y.Z"
+git push origin vX.Y.Z
+```
+
+### Version Cycle Example
+
+1. Initial version: 1.0.0
+2. "fix:" commit → 1.0.1
+3. "feature:" commit → 1.1.0
+4. "breaking:" commit → 2.0.0
+5. Manual tag: `git tag -a v2.0.0 -m "Version 2.0.0"`
+6. "fix:" commit → 2.0.1
