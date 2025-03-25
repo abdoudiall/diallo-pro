@@ -6,7 +6,12 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Abdoulaye Diallo',
-  description: 'Consultant Expert en Systèmes d\'Information'
+  description: 'Consultant en systèmes d\'information et transformation digitale',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  }
 };
 
 export default function RootLayout({
@@ -16,6 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className="dark">
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </head>
       <body className={inter.className}>
         {children}
       </body>
