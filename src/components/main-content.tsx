@@ -31,7 +31,6 @@ import {
   ChartBarSquareIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
 
 // References
 const companies = [
@@ -178,16 +177,6 @@ const navItems = [
 ];
 
 export function MainContent() {
-  const [version, setVersion] = useState<string>('');
-
-  useEffect(() => {
-    // Récupérer la version depuis l'API
-    fetch('/api/version')
-      .then(res => res.json())
-      .then(data => setVersion(data.version))
-      .catch(err => console.error('Erreur lors de la récupération de la version:', err));
-  }, []);
-
   return (
     <>
       {/* Navigation */}
@@ -428,12 +417,9 @@ export function MainContent() {
       {/* Footer */}
       <footer className="bg-gray-900/90 backdrop-blur-sm py-6">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="flex items-center justify-center">
             <p className="text-sm text-gray-400">
               © 2024 Halinia Consulting • Développé avec Cursor AI
-            </p>
-            <p className="text-xs text-gray-500">
-              v{version}
             </p>
           </div>
         </div>
