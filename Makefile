@@ -141,22 +141,20 @@ terraform-refresh:
 	@echo "$(BLUE)Refreshing Terraform state...$(RESET)"
 	cd $(TF_MAIN_PATH) && terraform refresh
 
-## DEV version: ## Affiche la version actuelle
+## DEV version: ## Display current version
 version:
 	@npm run version:show
 
-## DEV version-patch: ## Incrémente la version patch (0.0.X)
+## DEV version-patch: ## Increment patch version (0.0.X)
 version-patch:
 	@npm run version:patch
 
-## DEV version-minor: ## Incrémente la version mineure (0.X.0)
+## DEV version-minor: ## Increment minor version (0.X.0)
 version-minor:
 	@npm run version:minor
 
-## DEV version-major: ## Incrémente la version majeure (X.0.0)
+## DEV version-major: ## Increment major version (X.0.0)
 version-major:
 	@npm run version:major
 
-## DEV version: ## Display current version
-version:
-	@echo "$(BLUE)Current version:$(RESET) $(GREEN)$(VERSION)$(RESET)" 
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version version-patch version-minor version-major 
