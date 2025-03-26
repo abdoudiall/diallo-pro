@@ -20,12 +20,14 @@ Professional portfolio developed with Next.js, TypeScript, and Tailwind CSS.
 ## 🛠 Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/abdoudiall/diallo-pro.git
 cd diallo-pro
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -33,6 +35,7 @@ yarn install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 # or
@@ -52,6 +55,7 @@ The site will be available at [http://localhost:3000](http://localhost:3000)
 ## 🔒 Security
 
 The project includes several security measures:
+
 - Content Security Policy (CSP) configured in CloudFront
 - Security headers implemented through CloudFront Response Headers Policy:
   - Strict-Transport-Security (HSTS)
@@ -65,6 +69,7 @@ The project includes several security measures:
 ## 🚀 Performance
 
 The site includes several performance optimizations:
+
 - Static site generation with `output: 'export'`
 - SVG optimization for logos and icons
 - Compression enabled
@@ -111,6 +116,7 @@ make clean             # Remove generated files (.next, out, etc.)
 ## 📱 Responsive Design
 
 The site is fully responsive and adapts to all devices:
+
 - Mobile (< 640px)
 - Tablet (640px - 1024px)
 - Desktop (> 1024px)
@@ -118,6 +124,7 @@ The site is fully responsive and adapts to all devices:
 ## 🎨 Theme
 
 The site uses a dark theme exclusively with:
+
 - Dark background (`bg-gray-900`)
 - Accent colors:
   - Blue (`text-blue-500`, `text-blue-600`) for tech-related items
@@ -160,6 +167,7 @@ diallo-pro/
 ## 🔍 SEO
 
 The site includes basic SEO configuration:
+
 - Metadata in layout.tsx:
   - Title: "Abdoulaye Diallo"
   - Description: "Consultant en systèmes d'information et transformation digitale"
@@ -170,6 +178,7 @@ The site includes basic SEO configuration:
 ## 🤝 Contribution
 
 Contributions are welcome! Feel free to:
+
 1. Fork the project
 2. Create a branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
@@ -191,10 +200,12 @@ The project uses GitVersion for automatic version management. Versions follow th
 Versions are automatically incremented based on commit messages:
 
 - `breaking:` or `major:` → Increments major version (x.0.0)
+
   - Example: "breaking: major API changes"
   - Note: After a major version, you need to create a manual tag (ex: `git tag -a v2.0.0 -m "Version 2.0.0"`)
 
 - `feature:` or `feat:` → Increments minor version (1.x.0)
+
   - Example: "feature: add new functionality"
 
 - `fix:`, `patch:`, `chore:`, `docs:`, `style:`, `refactor:`, `ci:`, `build:` → Increments patch version (1.0.x)
@@ -219,3 +230,41 @@ git push origin vX.Y.Z
 4. "breaking:" commit → 2.0.0
 5. Manual tag: `git tag -a v2.0.0 -m "Version 2.0.0"`
 6. "fix:" commit → 2.0.1
+
+## Development
+
+### Pre-commit hooks
+
+This project uses pre-commit to maintain code quality. The following hooks are configured:
+
+- Formatting and linting:
+
+  - Prettier for TypeScript/JavaScript code formatting
+  - ESLint for TypeScript/JavaScript linting
+  - Terraform fmt for Terraform files formatting
+  - Terraform validate for Terraform configurations validation
+  - Checkov for Terraform security analysis
+
+- General checks:
+  - No trailing whitespace
+  - End of file with newline
+  - YAML/JSON validation
+  - Large files detection
+  - Main branch protection
+  - Merge conflict detection
+
+To install the hooks:
+
+```bash
+# Install dependencies
+brew install pre-commit tflint checkov
+
+# Install hooks
+pre-commit install
+```
+
+The hooks will run automatically on commits. To run them manually:
+
+```bash
+pre-commit run --all-files
+```
