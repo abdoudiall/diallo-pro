@@ -35,5 +35,8 @@ repos:
       - id: terraform_fmt
       - id: terraform_validate
       - id: terraform_docs
+        args:
+          - --args=--output-file
+          - README.md
       - id: terraform_tflint
       - id: terraform_checkov
