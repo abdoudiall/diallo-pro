@@ -20,27 +20,41 @@ Professional portfolio developed with Next.js, TypeScript, and Tailwind CSS.
 
 ## 🛠 Installation
 
-1. Clone the repository:
+1. Clone the repository
 
 ```bash
-git clone https://github.com/abdoudiall/diallo-pro.git
+git clone https://github.com/AbdoulayeDiallo/diallo-pro.git
 cd diallo-pro
 ```
 
-2. Install dependencies:
+2. Install dependencies and setup the project
 
 ```bash
-npm install
-# or
-yarn install
+make install
 ```
 
-3. Start the development server:
+## Available Commands
+
+The project uses Make to standardize common operations. Here are the main commands:
+
+- `make install` - Install dependencies and setup the project
+- `make dev` - Start the development server
+- `make build` - Build for production
+- `make deploy` - Deploy to production
+- `make clean` - Clean build artifacts
+- `make help` - Show all available commands
+
+For development:
 
 ```bash
-npm run dev
-# or
-yarn dev
+make dev
+```
+
+For production build and deployment:
+
+```bash
+make build
+make deploy
 ```
 
 The site will be available at [http://localhost:3000](http://localhost:3000)
@@ -302,3 +316,7 @@ The hooks will run automatically on commits. To run them manually:
 ```bash
 pre-commit run --all-files
 ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
