@@ -17,7 +17,7 @@ RESET = \033[0m
 BUCKET_NAME = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw website_bucket_name 2>/dev/null | tr -d '\n\r')
 DISTRIBUTION_ID = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw cloudfront_distribution_id 2>/dev/null | tr -d '\n\r')
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version terraform-docs
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version terraform-docs tag tag-m release tag-release
 
 help:
 	@echo "$(BLUE)Available commands:$(RESET)"
@@ -58,6 +58,38 @@ format:
 ## DEV version: ## Display current version
 version:
 	@echo "$(BLUE)Version:$(RESET) $(GREEN)$(VERSION)$(RESET)"
+
+## DEV tag: ## Create and push a git tag based on current version
+tag: version
+	@echo "$(BLUE)Creating new tag v$(VERSION)...$(RESET)"
+	@git tag -a "v$(VERSION)" -m "Release version $(VERSION)"
+	@git push origin "v$(VERSION)"
+	@echo "$(GREEN)Tag v$(VERSION) created and pushed to remote$(RESET)"
+
+## DEV tag-m: ## Create and push a git tag with custom message
+tag-m: version
+	@read -p "Enter tag message: " msg; \
+	echo "$(BLUE)Creating new tag v$(VERSION)...$(RESET)"; \
+	git tag -a "v$(VERSION)" -m "$$msg"; \
+	git push origin "v$(VERSION)"; \
+	echo "$(GREEN)Tag v$(VERSION) created and pushed to remote$(RESET)"
+
+## DEV release: ## Create GitHub release with smart notes generation
+release:
+	@echo "$(BLUE)Creating GitHub release for tag v$(VERSION)...$(RESET)"
+	@if git log --format=%B -n 1 HEAD | grep -q "^Release"; then \
+		echo "$(YELLOW)Using custom release notes from commit message...$(RESET)"; \
+		NOTES=$$(git log --format=%B -n 1 HEAD | sed -n '/^Release/,$$p'); \
+		gh release create "v$(VERSION)" --notes "$$NOTES"; \
+	else \
+		echo "$(YELLOW)Generating notes from commit history...$(RESET)"; \
+		gh release create "v$(VERSION)" --generate-notes; \
+	fi
+	@echo "$(GREEN)GitHub release created for v$(VERSION)$(RESET)"
+
+## DEV tag-release: ## Create tag and GitHub release in one step
+tag-release: tag release
+	@echo "$(GREEN)Tag and release process completed!$(RESET)"
 
 ## DEPLOY build: ## Build the Next.js application
 build:
@@ -159,4 +191,4 @@ terraform-docs:
 	@cd $(TF_MAIN_PATH) && terraform-docs markdown ../modules/s3 >> README.md
 	@echo "$(GREEN)Terraform documentation generated successfully in $(TF_MAIN_PATH)/README.md$(RESET)"
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version terraform-docs
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version terraform-docs tag tag-m release tag-release
