@@ -232,9 +232,7 @@ export function MainContent() {
               className="text-center mb-12"
             >
               <h2 className="text-3xl font-bold mb-4">Expertise</h2>
-              <p className="text-gray-400">
-                Une approche polyvalente au service de vos projets techniques
-              </p>
+              <p className="text-gray-400">Une approche polyvalente au service de vos projets</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
