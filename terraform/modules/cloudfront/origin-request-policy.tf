@@ -13,4 +13,4 @@ resource "aws_cloudfront_origin_request_policy" "s3_origin" {
   query_strings_config {
     query_string_behavior = "none"
   }
-} 
+}

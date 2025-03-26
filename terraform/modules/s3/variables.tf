@@ -12,4 +12,10 @@ variable "environment" {
 variable "cloudfront_distribution_arn" {
   description = "ARN of the CloudFront distribution"
   type        = string
-} 
+}
+
+variable "is_backup" {
+  description = "Whether this is a backup bucket"
+  type        = bool
+  default     = false
+}

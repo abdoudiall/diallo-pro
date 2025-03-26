@@ -12,4 +12,4 @@ output "cloudfront_distribution_id" {
 
 output "website_endpoint" {
   value = module.s3.website_endpoint
-} 
+}

@@ -18,4 +18,4 @@ resource "aws_cloudfront_cache_policy" "caching_optimized" {
     enable_accept_encoding_gzip   = true
     enable_accept_encoding_brotli = true
   }
-} 
+}

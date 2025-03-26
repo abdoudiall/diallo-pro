@@ -11,4 +11,4 @@ variable "cloudfront_distribution_domain_name" {
 variable "cloudfront_distribution_hosted_zone_id" {
   description = "Hosted zone ID of the CloudFront distribution"
   type        = string
-} 
+}

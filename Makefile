@@ -145,4 +145,4 @@ terraform-refresh:
 	@echo "$(BLUE)Refreshing Terraform state...$(RESET)"
 	cd $(TF_MAIN_PATH) && terraform refresh
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version 
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version

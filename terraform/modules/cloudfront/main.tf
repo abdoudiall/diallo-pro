@@ -1,3 +1,13 @@
+terraform {
+  required_version = ">= 1.0.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 # Create Origin Access Control for S3
 resource "aws_cloudfront_origin_access_control" "website" {
   name                              = "${var.domain_name}-oac"
@@ -5,6 +15,36 @@ resource "aws_cloudfront_origin_access_control" "website" {
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
+}
+
+# Create S3 bucket for CloudFront logs
+resource "aws_s3_bucket" "cloudfront_logs" {
+  bucket = "${var.domain_name}-cloudfront-logs"
+}
+
+# Enable ACL for CloudFront logs
+resource "aws_s3_bucket_ownership_controls" "cloudfront_logs" {
+  bucket = aws_s3_bucket.cloudfront_logs.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "cloudfront_logs" {
+  depends_on = [aws_s3_bucket_ownership_controls.cloudfront_logs]
+
+  bucket = aws_s3_bucket.cloudfront_logs.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_public_access_block" "cloudfront_logs" {
+  bucket = aws_s3_bucket.cloudfront_logs.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 # Create CloudFront distribution
@@ -17,18 +57,42 @@ resource "aws_cloudfront_distribution" "website" {
   http_version        = "http2"
   web_acl_id          = var.waf_web_acl_id
 
-  # Origin configuration
+  # Origin configuration with failover
   origin {
     domain_name              = var.s3_bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
     origin_id                = var.s3_bucket_id
   }
 
-  # Cache behavior
+  # Backup origin for failover
+  origin {
+    domain_name              = var.backup_s3_bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.website.id
+    origin_id                = var.backup_s3_bucket_id
+  }
+
+  # Origin group for failover
+  origin_group {
+    origin_id = "s3-origin-group"
+
+    failover_criteria {
+      status_codes = [500, 502, 503, 504]
+    }
+
+    member {
+      origin_id = var.s3_bucket_id
+    }
+
+    member {
+      origin_id = var.backup_s3_bucket_id
+    }
+  }
+
+  # Cache behavior with failover
   default_cache_behavior {
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
-    target_origin_id           = var.s3_bucket_id
+    target_origin_id           = "s3-origin-group"
     viewer_protocol_policy     = "redirect-to-https"
     compress                   = true
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
@@ -57,7 +121,8 @@ resource "aws_cloudfront_distribution" "website" {
   # Geographic restrictions
   restrictions {
     geo_restriction {
-      restriction_type = "none"
+      restriction_type = "whitelist"
+      locations        = ["US", "CA", "GB", "FR", "DE"] # Ajustez selon vos besoins
     }
   }
 
@@ -68,8 +133,15 @@ resource "aws_cloudfront_distribution" "website" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
+  # Enable access logging
+  logging_config {
+    bucket          = aws_s3_bucket.cloudfront_logs.bucket_regional_domain_name
+    include_cookies = false
+    prefix          = "cloudfront/"
+  }
+
   tags = {
     Name        = var.domain_name
     Environment = var.environment
   }
-} 
+}
