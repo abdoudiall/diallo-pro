@@ -1,0 +1,19 @@
+formatter: markdown
+
+sections:
+  show:
+    - header
+    - requirements
+    - providers
+    - modules
+    - resources
+    - inputs
+    - outputs
+
+output:
+  file: "terraform/main/README.md"
+  mode: replace
+
+sort:
+  enabled: true
+  by: required

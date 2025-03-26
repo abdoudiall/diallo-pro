@@ -35,5 +35,10 @@ repos:
       - id: terraform_fmt
       - id: terraform_validate
       - id: terraform_docs
+        args:
+          - --args=--config=.terraform-docs.yml
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true
       - id: terraform_tflint
       - id: terraform_checkov
