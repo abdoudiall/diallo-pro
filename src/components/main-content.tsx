@@ -46,7 +46,7 @@ const companies = [
   },
   {
     name: 'GSOI',
-    logo: '/images/logos/GSOI.jpg',
+    logo: '/images/logos/GSOI.jpeg',
     description: 'Groupe Sud-Ouest Interactive',
   },
   {
@@ -417,7 +417,8 @@ export function MainContent() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center">
             <p className="text-sm text-gray-400">
-              © 2024 Halinia Consulting • Développé avec Cursor AI
+              © {new Date().getFullYear()} Halinia Consulting • Développé avec l'assistance de l'IA
+              🤖
             </p>
           </div>
         </div>
