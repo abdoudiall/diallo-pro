@@ -17,7 +17,7 @@ RESET = \033[0m
 BUCKET_NAME = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw website_bucket_name 2>/dev/null | tr -d '\n\r')
 DISTRIBUTION_ID = $(shell cd $(TF_MAIN_PATH) && terraform output -no-color -raw cloudfront_distribution_id 2>/dev/null | tr -d '\n\r')
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version terraform-docs
 
 help:
 	@echo "$(BLUE)Available commands:$(RESET)"
@@ -145,4 +145,18 @@ terraform-refresh:
 	@echo "$(BLUE)Refreshing Terraform state...$(RESET)"
 	cd $(TF_MAIN_PATH) && terraform refresh
 
-.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version
+## INFRA terraform-docs: ## Generate Terraform documentation
+terraform-docs:
+	@echo "$(BLUE)Generating Terraform documentation...$(RESET)"
+	@cd $(TF_MAIN_PATH) && terraform-docs markdown . > README.md
+	@echo "$(BLUE)Adding submodules documentation...$(RESET)"
+	@cd $(TF_MAIN_PATH) && echo -e "\n\n## Submodules Documentation\n" >> README.md
+	@cd $(TF_MAIN_PATH) && echo -e "\n### CloudFront Module\n" >> README.md
+	@cd $(TF_MAIN_PATH) && terraform-docs markdown ../modules/cloudfront >> README.md
+	@cd $(TF_MAIN_PATH) && echo -e "\n### Route53 Module\n" >> README.md
+	@cd $(TF_MAIN_PATH) && terraform-docs markdown ../modules/route53 >> README.md
+	@cd $(TF_MAIN_PATH) && echo -e "\n### S3 Module\n" >> README.md
+	@cd $(TF_MAIN_PATH) && terraform-docs markdown ../modules/s3 >> README.md
+	@echo "$(GREEN)Terraform documentation generated successfully in $(TF_MAIN_PATH)/README.md$(RESET)"
+
+.PHONY: help build deploy terraform-format terraform-validate terraform-plan terraform-apply clean all show-vars terraform-refresh check-vars dev start lint format install version terraform-docs

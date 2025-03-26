@@ -11,6 +11,7 @@ Professional portfolio developed with Next.js, TypeScript, and Tailwind CSS.
 - **Icons**: Heroicons, Simple Icons
 - **UI Components**: Radix UI (Tooltip)
 - **Deployment**: AWS (S3, CloudFront, Route53)
+- **Infrastructure as Code**: Terraform
 
 ## 📋 Prerequisites
 
@@ -78,6 +79,29 @@ The site includes several performance optimizations:
 - Console removal in production
 - Package imports optimization
 
+## 🏗️ Infrastructure
+
+The infrastructure is managed using Terraform. The main components are:
+
+- S3 bucket for static website hosting
+- CloudFront distribution with security headers
+- Route53 for DNS management
+
+### Terraform Documentation
+
+The project includes automatic documentation generation for the Terraform configuration. To generate or update the documentation:
+
+```bash
+make terraform-docs
+```
+
+This command creates a comprehensive README.md file in the `terraform/main` directory that includes:
+
+- Main module documentation (inputs, outputs, resources)
+- Complete documentation for all submodules (CloudFront, Route53, S3)
+
+The documentation is automatically generated using terraform-docs and provides an up-to-date reference of all infrastructure components.
+
 ## 🚢 Deployment
 
 The site can be deployed using the provided Makefile commands.
@@ -99,6 +123,7 @@ make terraform-format    # Format Terraform code
 make terraform-validate  # Validate Terraform configuration
 make terraform-plan     # Show planned infrastructure changes
 make terraform-apply    # Apply infrastructure changes
+make terraform-docs     # Generate Terraform documentation
 
 # Website deployment
 make build              # Build the Next.js application
