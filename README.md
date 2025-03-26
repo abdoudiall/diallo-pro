@@ -102,6 +102,15 @@ This command creates a comprehensive README.md file in the `terraform/main` dire
 
 The documentation is automatically generated using terraform-docs and provides an up-to-date reference of all infrastructure components.
 
+### Detailed Infrastructure Documentation
+
+For a comprehensive understanding of the infrastructure:
+
+- **[INFRASTRUCTURE.md](./INFRASTRUCTURE.md)**: Complete architecture guide with detailed diagrams and explanations of all components and their interactions.
+- **[terraform/main/README.md](./terraform/main/README.md)**: Technical reference with all Terraform resources, inputs, outputs, and modules.
+
+These documents provide both high-level architectural overview and detailed technical specifications of the AWS infrastructure powering this site.
+
 ## 🚢 Deployment
 
 The site can be deployed using the provided Makefile commands.
