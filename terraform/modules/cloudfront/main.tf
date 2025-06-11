@@ -118,11 +118,11 @@ resource "aws_cloudfront_distribution" "website" {
     response_page_path = "/index.html"
   }
 
-  # Geographic restrictions
+  # No geographic restrictions
   restrictions {
     geo_restriction {
-      restriction_type = "whitelist"
-      locations        = ["US", "CA", "GB", "FR", "DE"] # Ajustez selon vos besoins
+      restriction_type = "none"
+      locations        = []
     }
   }
 
