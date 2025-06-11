@@ -3,7 +3,6 @@
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     emotion: true,
@@ -22,7 +21,6 @@ const nextConfig = {
     unoptimized: true,
   },
   compress: true,
-  optimizeFonts: true,
   output: 'export',
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   trailingSlash: true,
