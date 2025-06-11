@@ -127,7 +127,6 @@ export default function BZTransportsPage() {
                 <div className="flex items-center gap-3 bg-blue-100/80 rounded-lg px-3 py-2">
                   <FaEnvelope className="text-blue-600" />
                   <span className="text-gray-800 font-semibold">
-                    Email :{' '}
                     <a
                       href="mailto:boubzic@gmail.com"
                       className="text-blue-800 font-bold hover:underline"
@@ -139,14 +138,13 @@ export default function BZTransportsPage() {
                 <div className="flex items-center gap-3 bg-green-100/80 rounded-lg px-3 py-2">
                   <FaPhoneAlt className="text-green-600" />
                   <span className="text-gray-800 font-semibold">
-                    Téléphone :{' '}
                     <a href="tel:+33767783793" className="text-green-800 font-bold hover:underline">
                       07 67 78 37 93
                     </a>
                   </span>
                 </div>
-                <div className="flex items-center gap-3 mt-2">
-                  <span className="inline-block bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold px-4 py-1 rounded-full shadow animate-pulse text-base">
+                <div className="flex w-full justify-center items-center mt-2">
+                  <span className="flex items-center justify-center bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold px-4 py-1 rounded-full shadow animate-pulse text-base min-h-[40px] min-w-[200px]">
                     Service disponible 24/7
                   </span>
                 </div>
